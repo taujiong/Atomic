@@ -1,5 +1,6 @@
 using System.Reflection;
 using Atomic.AspNetCore.Mvc.Conventions;
+using Atomic.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -24,6 +25,16 @@ public static class WebApplicationBuilderExtensions
         {
             var xmlFileName = $"{Assembly.GetEntryAssembly()!.GetName().Name}.xml";
             options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
+        });
+    }
+
+    public static void AddAtomicLocalization(this WebApplicationBuilder builder, IMvcBuilder mvcBuilder)
+    {
+        builder.Services.AddLocalization();
+        mvcBuilder.AddDataAnnotationsLocalization(options =>
+        {
+            options.DataAnnotationLocalizerProvider = (_, factory) =>
+                factory.Create(typeof(AtomicSharedResource));
         });
     }
 }
