@@ -1,6 +1,7 @@
 using System.Reflection;
 using Atomic.AspNetCore.Mvc.ApiExplorer;
 using Atomic.AspNetCore.Mvc.Conventions;
+using Atomic.ExceptionHandling;
 using Atomic.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
@@ -21,6 +22,7 @@ public static class WebApplicationBuilderExtensions
         builder.Services.Configure<MvcOptions>(options =>
         {
             options.Conventions.Add(new AtomicApiControllerConvention(routeArea));
+            options.Filters.Add(typeof(AtomicExceptionFilter));
         });
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddTransient<IApiDescriptionProvider, ResponseTypeApiDescriptionProvider>();

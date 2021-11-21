@@ -3,6 +3,7 @@ using AppService.Dtos;
 using Atomic.AppService.Dtos;
 using Atomic.AppService.Services;
 using Atomic.AspNetCore.Mvc;
+using Atomic.ExceptionHandling;
 using Atomic.Identity.Api.Dtos;
 using Atomic.Identity.Api.Models;
 using AutoMapper;
@@ -28,7 +29,7 @@ public class UserController : AtomicControllerBase,
     public async Task<IdentityUserOutputDto> GetById(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new EntityNotFoundException(typeof(AppUser), id);
 
         return _mapper.Map<AppUser, IdentityUserOutputDto>(user);
     }
@@ -58,38 +59,55 @@ public class UserController : AtomicControllerBase,
             PhoneNumber = input.PhoneNumber,
         };
         var createResult = await _userManager.CreateAsync(user, input.Password);
-        if (createResult.Succeeded)
-        {
-            return _mapper.Map<AppUser, IdentityUserOutputDto>(user);
-        }
+        createResult.CheckErrors();
 
-        throw new Exception(createResult.Errors.First().Description);
+        return _mapper.Map<AppUser, IdentityUserOutputDto>(user);
     }
 
     [HttpDelete("{id}")]
     public async Task DeleteById(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
-        if (user == null) throw new Exception("user not fount");
+        if (user == null) throw new EntityNotFoundException(typeof(AppUser), id);
 
         var deleteResult = await _userManager.DeleteAsync(user);
-        if (deleteResult.Succeeded) return;
-
-        throw new Exception(deleteResult.Errors.First().Description);
+        deleteResult.CheckErrors();
     }
 
     [HttpPut("{id}")]
     public async Task<IdentityUserOutputDto> UpdateById(string id, IdentityUserUpdateDto input)
     {
         var user = await _userManager.FindByIdAsync(id);
-        if (user == null) throw new Exception("User not found");
+        if (user == null) throw new EntityNotFoundException(typeof(AppUser), id);
 
         user.Email = input.Email;
         user.UserName = input.UserName;
         user.PhoneNumber = input.PhoneNumber;
         var updateResult = await _userManager.UpdateAsync(user);
-        if (updateResult.Succeeded) return _mapper.Map<AppUser, IdentityUserOutputDto>(user);
+        updateResult.CheckErrors();
 
-        throw new Exception(updateResult.Errors.First().Description);
+        return _mapper.Map<AppUser, IdentityUserOutputDto>(user);
+    }
+
+    [HttpGet("by-name/{name}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    public async Task<IdentityUserOutputDto> GetByName(string name)
+    {
+        var user = await _userManager.FindByNameAsync(name);
+        if (user == null) throw new EntityNotFoundException(typeof(AppUser), name, "userName");
+
+        return _mapper.Map<AppUser, IdentityUserOutputDto>(user);
+    }
+
+    [HttpGet("by-email/{email}")]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(404)]
+    public async Task<IdentityUserOutputDto> GetByEmail(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null) throw new EntityNotFoundException(typeof(AppUser), email, "email");
+
+        return _mapper.Map<AppUser, IdentityUserOutputDto>(user);
     }
 }
