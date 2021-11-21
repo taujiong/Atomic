@@ -2,8 +2,10 @@ using Atomic.Identity.Api.Data;
 using Atomic.Identity.Api.Dtos;
 using Atomic.Identity.Api.Localization;
 using Atomic.Identity.Api.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,8 +20,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     });
 });
 builder.Services.AddDataProtection(); // fot token providers in identity system
+builder.Services.TryAddSingleton<ISystemClock, SystemClock>(); // for security stamp validators in identity system
 builder.Services.AddIdentityCore<AppUser>()
     .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
+    .AddSignInManager<SignInManager<AppUser>>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
 
