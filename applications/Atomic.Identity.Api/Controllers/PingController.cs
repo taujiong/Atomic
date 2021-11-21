@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Atomic.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Atomic.Identity.Api.Controllers;
 
-[ApiController]
-[Route("ping")]
-public class PingController : ControllerBase
+public class PingController : AtomicControllerBase
 {
     [HttpGet]
-    public ActionResult<string> OnGet()
+    public ActionResult<string> OnGet(string? name)
     {
-        return new ObjectResult("pong");
+        return string.IsNullOrEmpty(name) ? NotFound() : new ObjectResult($"pong, {name}");
     }
 }

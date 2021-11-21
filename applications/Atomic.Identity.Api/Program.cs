@@ -3,8 +3,7 @@ var builder = WebApplication.CreateBuilder(args);
 #region Add services to the container
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.ConfigureApiController();
 
 #endregion
 
@@ -12,11 +11,7 @@ var app = builder.Build();
 
 #region Configure the HTTP request pipeline.
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseAtomicControllerPreset();
 
 app.UseHttpsRedirection();
 

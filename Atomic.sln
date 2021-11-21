@@ -7,6 +7,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "applications", "application
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atomic.Identity.Api", "applications\Atomic.Identity.Api\Atomic.Identity.Api.csproj", "{6151EB7E-8A8C-4088-B0F5-16EAFCE70044}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infrastructures", "infrastructures", "{A144D2CC-1CE4-4827-A50D-350FAC6B6D43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atomic.Dotnet", "infrastructures\Atomic.Dotnet\Atomic.Dotnet.csproj", "{DFCFFAD6-2540-4AEE-843A-2FD790F4DB4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,11 +21,16 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6151EB7E-8A8C-4088-B0F5-16EAFCE70044} = {27207A57-06F2-476C-AE97-67AE640A517E}
+		{DFCFFAD6-2540-4AEE-843A-2FD790F4DB4D} = {A144D2CC-1CE4-4827-A50D-350FAC6B6D43}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6151EB7E-8A8C-4088-B0F5-16EAFCE70044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6151EB7E-8A8C-4088-B0F5-16EAFCE70044}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6151EB7E-8A8C-4088-B0F5-16EAFCE70044}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6151EB7E-8A8C-4088-B0F5-16EAFCE70044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFCFFAD6-2540-4AEE-843A-2FD790F4DB4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFCFFAD6-2540-4AEE-843A-2FD790F4DB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFCFFAD6-2540-4AEE-843A-2FD790F4DB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFCFFAD6-2540-4AEE-843A-2FD790F4DB4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
