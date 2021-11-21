@@ -432,3 +432,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+### JetBrains+all Patch ###
+
+appsettings.*.json
