@@ -1,9 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Atomic.UnifiedAuth.Api.Dtos;
+namespace Atomic.Identity.Api.Dtos;
 
 public record ChangePasswordDto
 {
+    [Required]
+    public string? Id { get; set; }
+
     [Required]
     [StringLength(16, MinimumLength = 6)]
     [DataType(DataType.Password)]
