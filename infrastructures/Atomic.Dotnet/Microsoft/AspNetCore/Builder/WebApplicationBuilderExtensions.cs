@@ -1,7 +1,9 @@
 using System.Reflection;
+using Atomic.AspNetCore.Mvc.ApiExplorer;
 using Atomic.AspNetCore.Mvc.Conventions;
 using Atomic.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Microsoft.AspNetCore.Builder;
@@ -21,6 +23,7 @@ public static class WebApplicationBuilderExtensions
             options.Conventions.Add(new AtomicApiControllerConvention(routeArea));
         });
         builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddTransient<IApiDescriptionProvider, ResponseTypeApiDescriptionProvider>();
         builder.Services.AddSwaggerGen(options =>
         {
             var xmlFileName = $"{Assembly.GetEntryAssembly()!.GetName().Name}.xml";
@@ -30,6 +33,8 @@ public static class WebApplicationBuilderExtensions
 
     public static void AddAtomicLocalization(this WebApplicationBuilder builder, IMvcBuilder mvcBuilder)
     {
+        if (builder == null) throw new ArgumentNullException(nameof(builder));
+
         builder.Services.AddLocalization();
         mvcBuilder.AddDataAnnotationsLocalization(options =>
         {
