@@ -29,7 +29,7 @@ public class UserController : AtomicControllerBase,
     }
 
     [HttpGet]
-    public async Task<PagedResultDto<AppUser>> GetListByQuery([FromQuery] QueryRequestDto input)
+    public async Task<PagedResultDto<AppUser>> GetListByQuery(QueryRequestDto input)
     {
         var totalCount = await _userManager.Users.CountAsync();
         var users = await _userManager.Users
