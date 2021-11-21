@@ -1,4 +1,5 @@
 using Atomic.Identity.Api.Data;
+using Atomic.Identity.Api.Dtos;
 using Atomic.Identity.Api.Localization;
 using Atomic.Identity.Api.Models;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +22,8 @@ builder.Services.AddIdentityCore<AppUser>()
     .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddAutoMapper(typeof(IdentityMapperProfile));
 
 var mvcBuilder = builder.Services.AddControllers();
 builder.AddAtomicLocalization(mvcBuilder);

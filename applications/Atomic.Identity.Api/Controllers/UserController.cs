@@ -5,6 +5,7 @@ using Atomic.AppService.Services;
 using Atomic.AspNetCore.Mvc;
 using Atomic.Identity.Api.Dtos;
 using Atomic.Identity.Api.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,25 +13,28 @@ using Microsoft.EntityFrameworkCore;
 namespace Atomic.Identity.Api.Controllers;
 
 public class UserController : AtomicControllerBase,
-    ICrudAppService<string, AppUser, IdentityUserCreateDto, IdentityUserUpdateDto>
+    ICrudAppService<string, IdentityUserOutputDto, IdentityUserCreateDto, IdentityUserUpdateDto>
 {
+    private readonly IMapper _mapper;
     private readonly UserManager<AppUser> _userManager;
 
-    public UserController(UserManager<AppUser> userManager)
+    public UserController(UserManager<AppUser> userManager, IMapper mapper)
     {
         _userManager = userManager;
+        _mapper = mapper;
     }
 
     [HttpGet("{id}")]
-    public async Task<AppUser> GetById(string id)
+    public async Task<IdentityUserOutputDto> GetById(string id)
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user == null) throw new Exception("User not found");
-        return user;
+
+        return _mapper.Map<AppUser, IdentityUserOutputDto>(user);
     }
 
     [HttpGet]
-    public async Task<PagedResultDto<AppUser>> GetListByQuery(QueryRequestDto input)
+    public async Task<PagedResultDto<IdentityUserOutputDto>> GetListByQuery(QueryRequestDto input)
     {
         var totalCount = await _userManager.Users.CountAsync();
         var users = await _userManager.Users
@@ -41,21 +45,22 @@ public class UserController : AtomicControllerBase,
             .OrderBy(input.Sort ?? "UserName ASC")
             .ToListAsync();
 
-        return new PagedResultDto<AppUser>(totalCount, users);
+        var userDtos = _mapper.Map<List<AppUser>, List<IdentityUserOutputDto>>(users);
+        return new PagedResultDto<IdentityUserOutputDto>(totalCount, userDtos);
     }
 
     [HttpPost]
-    public async Task<AppUser> Create(IdentityUserCreateDto input)
+    public async Task<IdentityUserOutputDto> Create(IdentityUserCreateDto input)
     {
         var user = new AppUser(input.UserName!)
         {
             Email = input.Email,
             PhoneNumber = input.PhoneNumber,
         };
-        var createResult = await _userManager.CreateAsync(user, "1q2w3E*");
+        var createResult = await _userManager.CreateAsync(user, input.Password);
         if (createResult.Succeeded)
         {
-            return user;
+            return _mapper.Map<AppUser, IdentityUserOutputDto>(user);
         }
 
         throw new Exception(createResult.Errors.First().Description);
@@ -66,21 +71,25 @@ public class UserController : AtomicControllerBase,
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user == null) throw new Exception("user not fount");
+
         var deleteResult = await _userManager.DeleteAsync(user);
         if (deleteResult.Succeeded) return;
+
         throw new Exception(deleteResult.Errors.First().Description);
     }
 
     [HttpPut("{id}")]
-    public async Task<AppUser> UpdateById(string id, IdentityUserUpdateDto input)
+    public async Task<IdentityUserOutputDto> UpdateById(string id, IdentityUserUpdateDto input)
     {
         var user = await _userManager.FindByIdAsync(id);
         if (user == null) throw new Exception("User not found");
+
         user.Email = input.Email;
         user.UserName = input.UserName;
         user.PhoneNumber = input.PhoneNumber;
         var updateResult = await _userManager.UpdateAsync(user);
-        if (updateResult.Succeeded) return user;
+        if (updateResult.Succeeded) return _mapper.Map<AppUser, IdentityUserOutputDto>(user);
+
         throw new Exception(updateResult.Errors.First().Description);
     }
 }
