@@ -1,4 +1,5 @@
-﻿using AppService.Dtos;
+﻿using System.Linq.Dynamic.Core;
+using AppService.Dtos;
 using Atomic.AppService.Dtos;
 using Atomic.AppService.Services;
 using Atomic.AspNetCore.Mvc;
@@ -33,9 +34,11 @@ public class UserController : AtomicControllerBase,
     {
         var totalCount = await _userManager.Users.CountAsync();
         var users = await _userManager.Users
-            .Skip(input.SkipCount)
-            .Take(input.MaxResultCount)
-            // TODO: cope with sort
+            .WhereIf(
+                !string.IsNullOrEmpty(input.Filter),
+                user => user.UserName.Contains(input.Filter!) || user.Email.Contains(input.Filter!))
+            .PageBy(input.SkipCount, input.MaxResultCount)
+            .OrderBy(input.Sort ?? "UserName ASC")
             .ToListAsync();
 
         return new PagedResultDto<AppUser>(totalCount, users);
