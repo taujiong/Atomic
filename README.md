@@ -12,7 +12,28 @@ develop and deploy all my applications based on [Dapr](https://dapr.io/)
 
 ## Scheduled applications
 
-- [ ] Identity provider to provide user and permission management api
-- [ ] OAuth provider to authorize clients and scopes based on OAuth2.0
-- [ ] Unified login page for all ui-based applications that require authentication
-- [ ] Localization provider to provide localization resource for all applications
+- UnifiedAuth Web
+  - [ ] implement OAuth2.0 to provide token and authorization
+  - [ ] unified login page for all ui-based applications that require authentication
+- Identity Api
+  - [x] manage users
+  - [x] check, change, reset password
+  - [x] check login with password or external provider
+  - [ ] manage external login providers
+  - [ ] manage permissions
+- IdentityServer Api
+  - [ ] manage IdentityServer resources
+    - [ ] clients
+    - [ ] identity resources
+    - [ ] api scopes
+    - [ ] api resources
+  - [ ] allow authenticated user to issue token
+- Localization Api
+  - [ ] provide unified localization resource among applications
+  - [ ] manage supported languages
+  - [ ] manage localization resource
+- Localization Web
+  - [ ] add or update localization materials
+  - [ ] manage supported languages
+  - [ ] notify when new localization materials should be update or add
+  - [ ] allow public contribution to localization
