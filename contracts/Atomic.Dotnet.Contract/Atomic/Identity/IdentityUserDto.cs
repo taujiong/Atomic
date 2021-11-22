@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Atomic.Identity.Api.Dtos;
+namespace Atomic.Identity;
 
 public record IdentityUserUpdateDto
 {

@@ -1,0 +1,194 @@
+a {
+    font-size: 1rem;
+    color: #666666;
+    text-decoration: none;
+}
+
+a:focus {
+    outline: none !important;
+}
+
+a:hover {
+    color: #a64bf4;
+}
+
+label {
+    vertical-align: middle;
+}
+
+.iconfont {
+    width: 1em;
+    height: 1em;
+}
+
+.background {
+    background: url("../images/background.jpg") no-repeat;
+    background-size: cover;
+}
+
+/*<editor-fold desc="social">*/
+.social-button {
+    font-size: 1.5rem;
+    width: 40px;
+    height: 40px;
+    outline: none;
+    border: none;
+    background: transparent;
+    transition: font-size 0.5s linear;
+}
+
+.social-button:hover {
+    font-size: 2rem;
+    cursor: pointer;
+}
+
+/*</editor-fold>*/
+
+/*<editor-fold desc="bubble">*/
+.bg-bubbles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.bg-bubbles li {
+    position: absolute;
+    list-style: none;
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.15);
+    bottom: 0;
+    visibility: hidden;
+    animation: square 10s infinite;
+    transition-timing-function: linear;
+}
+
+.bg-bubbles li:nth-child(1) {
+    left: 5%;
+    animation-delay: 3s;
+}
+
+.bg-bubbles li:nth-child(2) {
+    left: 15%;
+    width: 80px;
+    height: 80px;
+    animation-delay: 2s;
+    animation-duration: 20s;
+}
+
+.bg-bubbles li:nth-child(3) {
+    left: 25%;
+}
+
+.bg-bubbles li:nth-child(4) {
+    left: 35%;
+    width: 60px;
+    height: 60px;
+    animation-duration: 15s;
+}
+
+.bg-bubbles li:nth-child(5) {
+    left: 45%;
+    animation-delay: 0.5s;
+    animation-duration: 12s;
+}
+
+.bg-bubbles li:nth-child(6) {
+    left: 55%;
+    width: 50px;
+    height: 50px;
+    animation-delay: 1.5s;
+    animation-duration: 12.5s;
+}
+
+.bg-bubbles li:nth-child(7) {
+    left: 65%;
+    width: 120px;
+    height: 120px;
+    animation-delay: 4s;
+    animation-duration: 25s;
+}
+
+.bg-bubbles li:nth-child(8) {
+    left: 75%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 3.5s;
+    animation-duration: 16s;
+}
+
+.bg-bubbles li:nth-child(9) {
+    left: 85%;
+    width: 10px;
+    height: 10px;
+    animation-delay: 2s;
+    animation-duration: 14s;
+}
+
+.bg-bubbles li:nth-child(10) {
+    left: 95%;
+    width: 20px;
+    height: 20px;
+    animation-delay: 2s;
+    animation-duration: 15s;
+}
+
+@keyframes square {
+    0% {
+        transform: translatey(0);
+    }
+
+    100% {
+        visibility: visible;
+        transform: translatey(-110vh) rotate(720deg);
+    }
+}
+
+/*</editor-fold>*/
+
+/*<editor-fold desc="consent">*/
+.logo-client-wrapper {
+    height: 6rem;
+    width: 6rem;
+    border-radius: 50%;
+    background-color: #f6f6f6;
+    position: relative;
+}
+
+.logo-client {
+    width: 4em;
+    height: 4em;
+    fill: currentColor;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.connection {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.icon-tick {
+    width: 2rem;
+    height: 2rem;
+    vertical-align: -0.15em;
+    fill: currentColor;
+}
+
+.connection:before,
+.connection:after {
+    content: '';
+    flex: 1;
+    border-top: 2px dashed #aaa9a9;
+    margin: 0 0.5rem;
+}
+
+/*</editor-fold>*/

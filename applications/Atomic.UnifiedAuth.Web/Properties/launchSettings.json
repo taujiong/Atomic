@@ -1,16 +1,16 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
-    "Atomic.Identity.Api": {
+    "Atomic.UnifiedAuth.Web": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7199",
+      "launchUrl": "https://localhost:7186/Account/Login",
+      "applicationUrl": "https://localhost:7186",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DAPR_HTTP_PORT": "3500",
-        "DAPR_GRPC_PORT": "52000"
+        "DAPR_HTTP_PORT": "3501",
+        "DAPR_GRPC_PORT": "52001"
       }
     }
   }

@@ -1,7 +1,6 @@
-using Atomic.Identity.Api.Models;
 using AutoMapper;
 
-namespace Atomic.Identity.Api.Dtos;
+namespace Atomic.Identity.Api.Models;
 
 public class IdentityMapperProfile : Profile
 {

@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace Microsoft.AspNetCore.Builder;
 
@@ -13,5 +15,11 @@ public static class WebApplicationExtensions
             app.UseSwagger();
             app.UseSwaggerUI();
         }
+    }
+
+    public static void UseAtomicLocalization(this WebApplication app)
+    {
+        var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>();
+        app.UseRequestLocalization(localizationOptions.Value);
     }
 }

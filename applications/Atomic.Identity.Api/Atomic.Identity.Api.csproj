@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\contracts\Atomic.Dotnet.Contract\Atomic.Dotnet.Contract.csproj" />
     <ProjectReference Include="..\..\infrastructures\Atomic.Dotnet\Atomic.Dotnet.csproj" />
   </ItemGroup>
 

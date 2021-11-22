@@ -1,8 +1,10 @@
+using System.Globalization;
 using System.Reflection;
 using Atomic.AspNetCore.Mvc.ApiExplorer;
 using Atomic.AspNetCore.Mvc.Conventions;
 using Atomic.ExceptionHandling;
 using Atomic.Localization;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
@@ -42,6 +44,21 @@ public static class WebApplicationBuilderExtensions
         {
             options.DataAnnotationLocalizerProvider = (_, factory) =>
                 factory.Create(typeof(AtomicSharedResource));
+        });
+
+        // TODO: get from dapr
+        builder.Services.Configure<RequestLocalizationOptions>(options =>
+        {
+            var supportedCultures = new List<CultureInfo>
+            {
+                new("zh-CN"),
+                new("en-US"),
+            };
+
+            options.ApplyCurrentCultureToResponseHeaders = true;
+            options.DefaultRequestCulture = new RequestCulture("zh-CN", "zh-CN");
+            options.SupportedCultures = supportedCultures;
+            options.SupportedUICultures = supportedCultures;
         });
     }
 }

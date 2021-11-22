@@ -1,5 +1,4 @@
 using Atomic.Identity.Api.Data;
-using Atomic.Identity.Api.Dtos;
 using Atomic.Identity.Api.Localization;
 using Atomic.Identity.Api.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -42,6 +41,8 @@ var app = builder.Build();
 app.UseAtomicControllerPreset();
 
 app.UseHttpsRedirection();
+
+app.UseAtomicLocalization();
 
 app.UseAuthorization();
 

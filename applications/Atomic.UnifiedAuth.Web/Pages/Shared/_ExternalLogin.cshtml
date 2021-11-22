@@ -1,0 +1,31 @@
+@inject IAuthenticationSchemeProvider _schemeProvider
+@using Microsoft.AspNetCore.Authentication
+@model string
+
+@{
+  var allSchemes = await _schemeProvider.GetAllSchemesAsync();
+  var externalSchemes = allSchemes.Where(s => !string.IsNullOrEmpty(s.DisplayName)).ToArray();
+}
+
+@if (externalSchemes.Any())
+{
+  <div class="has-text-centered my-2">
+    <span>@_localizer["Use another service"]</span>
+  </div>
+
+  <form asp-page="./ExternalLogin"
+        asp-route-ReturnUrl="@Model"
+        method="post">
+    <div class="columns is-centered is-mobile my-0">
+      @foreach (var scheme in externalSchemes)
+      {
+        <button type="submit" class="social-button"
+                name="scheme" value="@scheme.Name">
+          <svg class="iconfont">
+            <use xlink:href="#icon-@scheme.DisplayName?.ToLower()"></use>
+          </svg>
+        </button>
+      }
+    </div>
+  </form>
+}

@@ -1,0 +1,55 @@
+﻿@using System.Globalization
+@{
+  Layout = null;
+
+  var title = _localizer["Atomic Unified Auth Platform"].Value;
+  if (ViewData["Title"] != null)
+    title = ViewData["Title"] + " - " + title;
+
+  var culture = CultureInfo.CurrentCulture.Name;
+  if (string.IsNullOrEmpty(culture)) culture = "en-US";
+}
+
+<!DOCTYPE html>
+
+<html lang="@culture">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        name="viewport">
+  @await Html.PartialAsync("./_Favicons")
+
+  <title>@title</title>
+
+  <link href="https://cdn.bootcdn.net/ajax/libs/bulma/0.9.1/css/bulma.min.css" rel="stylesheet">
+  <link asp-append-version="true" href="/styles/site.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<ul class="bg-bubbles">
+  @for (var n = 0; n < 10; n++)
+  {
+    <li></li>
+  }
+</ul>
+
+<section class="hero is-fullheight background">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered is-flex-mobile">
+        <div class="column" style="max-width: 410px;">
+          <div class="box">
+            @if (ViewData.ContainsKey("Title"))
+            {
+              <div class="has-text-centered is-size-2 mb-4">@ViewData["Title"]</div>
+            }
+            @RenderBody()
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script asp-append-version="true" src="/js/iconfont.js"></script>
+</body>
+</html>

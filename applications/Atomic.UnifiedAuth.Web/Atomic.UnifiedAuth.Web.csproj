@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\contracts\Atomic.Dotnet.Contract\Atomic.Dotnet.Contract.csproj" />
+    <ProjectReference Include="..\..\infrastructures\Atomic.Dotnet\Atomic.Dotnet.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapr.Client" Version="1.5.0" />
+  </ItemGroup>
+
+</Project>

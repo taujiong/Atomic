@@ -6,6 +6,7 @@ develop and deploy all my applications based on [Dapr](https://dapr.io/)
 
 - applications: source code for each service or web application
 - components: building blocks config for dapr
+- contracts: dto definition for each language
 - deployments: deployment config for dapr and k8s
 - infrastructures: shared modules for each language
 - scripts: util scripts to improve develop experience
