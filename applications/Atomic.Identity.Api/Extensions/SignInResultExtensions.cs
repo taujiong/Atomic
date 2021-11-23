@@ -1,6 +1,7 @@
-using Atomic.ExceptionHandling;
+using Atomic.Identity.Api.ExceptionHandling;
+using Microsoft.AspNetCore.Identity;
 
-namespace Microsoft.AspNetCore.Identity;
+namespace Atomic.Identity.Api.Extensions;
 
 public static class SignInResultExtensions
 {
@@ -13,17 +14,17 @@ public static class SignInResultExtensions
 
         if (result.IsLockedOut)
         {
-            throw new AuthException(AuthError.IsLockedOut);
+            throw new SignInException(AuthError.IsLockedOut);
         }
 
         if (result.IsNotAllowed)
         {
-            throw new AuthException(AuthError.IsNotAllowed);
+            throw new SignInException(AuthError.IsNotAllowed);
         }
 
         if (!result.RequiresTwoFactor)
         {
-            throw new AuthException(AuthError.WrongCredential);
+            throw new SignInException(AuthError.WrongCredential);
         }
     }
 }

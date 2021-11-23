@@ -1,5 +1,7 @@
 using Atomic.AspNetCore.Mvc;
 using Atomic.ExceptionHandling;
+using Atomic.Identity.Api.ExceptionHandling;
+using Atomic.Identity.Api.Extensions;
 using Atomic.Identity.Api.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
@@ -58,13 +60,13 @@ public class LoginController : AtomicControllerBase
 
         if (!await _signInManager.CanSignInAsync(user))
         {
-            throw new AuthException(AuthError.IsNotAllowed);
+            throw new SignInException(AuthError.IsNotAllowed);
         }
 
         var userIsLockedOut = _userManager.SupportsUserLockout && await _userManager.IsLockedOutAsync(user);
         if (userIsLockedOut)
         {
-            throw new AuthException(AuthError.IsLockedOut);
+            throw new SignInException(AuthError.IsLockedOut);
         }
 
         return _mapper.Map<AppUser, IdentityUserOutputDto>(user);

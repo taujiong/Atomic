@@ -4,6 +4,7 @@ using Atomic.AppService.Dtos;
 using Atomic.AppService.Services;
 using Atomic.AspNetCore.Mvc;
 using Atomic.ExceptionHandling;
+using Atomic.Identity.Api.Extensions;
 using Atomic.Identity.Api.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
