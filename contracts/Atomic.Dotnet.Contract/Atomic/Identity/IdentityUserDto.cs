@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Atomic.Identity;
@@ -5,12 +6,14 @@ namespace Atomic.Identity;
 public record IdentityUserUpdateDto
 {
     [Required]
+    [DisplayName("User name")]
     public string? UserName { get; set; }
 
     [DataType(DataType.EmailAddress)]
     public string? Email { get; set; }
 
     [DataType(DataType.PhoneNumber)]
+    [DisplayName("Phone number")]
     public string? PhoneNumber { get; set; }
 }
 

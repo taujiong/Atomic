@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Atomic.Identity;
@@ -5,6 +6,7 @@ namespace Atomic.Identity;
 public record PasswordLoginDto
 {
     [Required]
+    [DisplayName("User name or email")]
     public string? UserNameOrEmail { get; set; }
 
     [Required]

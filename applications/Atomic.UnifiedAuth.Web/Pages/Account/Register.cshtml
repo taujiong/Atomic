@@ -1,0 +1,74 @@
+﻿@page
+@model Atomic.UnifiedAuth.Web.Pages.Account.Register
+
+@{
+  ViewData["Title"] = _localizer["Register"].Value;
+}
+
+@await Html.PartialAsync("Shared/_ErrorNotification", Model.PageErrorMessage)
+
+<form method="post">
+  <input asp-for="ReturnUrl">
+
+  <div class="field">
+    <label asp-for="Input.UserName" class="label"></label>
+    <div class="control has-icons-left">
+      <input asp-for="Input.UserName" class="input">
+      <span class="icon is-small is-left">
+        <svg aria-hidden="true" class="iconfont">
+          <use xlink:href="#icon-user"></use>
+        </svg>
+      </span>
+    </div>
+    <span asp-validation-for="Input.UserName" class="help is-danger"></span>
+  </div>
+
+  <div class="field">
+    <label asp-for="Input.Email" class="label"></label>
+    <div class="control has-icons-left">
+      <input asp-for="Input.Email" class="input">
+      <span class="icon is-small is-left">
+        <svg aria-hidden="true" class="iconfont">
+          <use xlink:href="#icon-email"></use>
+        </svg>
+      </span>
+    </div>
+    <span asp-validation-for="Input.Email" class="help is-danger"></span>
+  </div>
+
+  <div class="field">
+    <label asp-for="Input.Password" class="label"></label>
+    <div class="control has-icons-left">
+      <input asp-for="Input.Password" class="input">
+      <span class="icon is-small is-left">
+        <svg aria-hidden="true" class="iconfont">
+          <use xlink:href="#icon-lock"></use>
+        </svg>
+      </span>
+    </div>
+    <span asp-validation-for="Input.Password" class="help is-danger"></span>
+  </div>
+
+  <button class="button is-primary is-rounded is-fullwidth my-4">
+    @_localizer["Register"]
+  </button>
+</form>
+
+@if (!Model.IsExternal)
+{
+  @await Html.PartialAsync("Shared/_ExternalLogin", Model.ReturnUrl)
+}
+
+<div class="has-text-centered">
+  <a asp-page="./Login"
+     asp-route-ReturnUrl="@Model.ReturnUrl"
+     class="is-size-6 mx-1">
+    @_localizer["Login"]
+  </a>
+  <a asp-page="./Login"
+     asp-page-handler="Cancel"
+     asp-route-ReturnUrl="@Model.ReturnUrl"
+     class="is-size-6 mx-1">
+    @_localizer["Cancel"]
+  </a>
+</div>

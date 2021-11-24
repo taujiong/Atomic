@@ -1,6 +1,7 @@
-using System.Text.Json;
 using Atomic.Identity;
 using Dapr.Client;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Atomic.UnifiedAuth.Web.Pages.Account;
@@ -20,13 +21,28 @@ public class Login : AccountPageModel
     [BindProperty]
     public PasswordLoginDto Input { get; set; }
 
+    public async Task OnGetAsync()
+    {
+        // clear the existing external cookie to ensure a clean login process
+        await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+    }
+
     public async Task<ActionResult> OnPostAsync()
     {
-        var result =
-            await _daprClient.InvokeMethodAsync<PasswordLoginDto, IdentityUserOutputDto>(HttpMethod.Post, "Identity",
-                "api/identity/logins/password", Input);
-        _logger.LogInformation("result is {result}", JsonSerializer.Serialize(result));
+        if (!ModelState.IsValid) return Page();
 
-        return Page();
+        var request = _daprClient.CreateInvokeMethodRequest(
+            HttpMethod.Post,
+            "Identity",
+            "api/identity/logins/password",
+            Input);
+        var response = await _daprClient.InvokeMethodWithResponseAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            return RedirectSafely();
+        }
+
+        return await PageWithError(response);
     }
 }

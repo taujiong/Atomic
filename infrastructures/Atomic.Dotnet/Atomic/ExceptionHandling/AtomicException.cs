@@ -5,8 +5,9 @@ namespace Atomic.ExceptionHandling;
 
 public class AtomicException : Exception
 {
+    public const string DefaultExceptionMessage = "Unexpected error occured.";
     public static readonly AtomicException InternalServer500Exception = new(
-        "Unexpected error occured.",
+        DefaultExceptionMessage,
         "This is an internal server error, please try again later.");
 
     public AtomicException(string message, string? detail = null, Exception? innerException = null)
