@@ -1,8 +1,10 @@
+using System.Security.Cryptography.X509Certificates;
 using Dapr.Client;
+using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
 
 #region Add services to the container
 
@@ -35,6 +37,39 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
         options.ClientSecret = builder.Configuration["OAuth:Google:ClientSecret"];
     });
 
+var identityServerBuilder = builder.Services.AddIdentityServer(options =>
+{
+    options.IssuerUri = builder.Configuration["OAuthServer:IssuerUrl"];
+    options.UserInteraction.ErrorUrl = "/Error";
+});
+var connectionString = builder.Configuration.GetConnectionString("IdentityServer");
+identityServerBuilder.AddConfigurationStore<ConfigurationDbContext>(options =>
+    {
+        options.ConfigureDbContext = b => b.UseNpgsql(connectionString, sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(15), null);
+        });
+    })
+    .AddOperationalStore<PersistedGrantDbContext>(options =>
+    {
+        options.ConfigureDbContext = b => b.UseNpgsql(connectionString, sqlOptions =>
+        {
+            sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(15), null);
+        });
+    });
+
+if (builder.Environment.IsDevelopment())
+{
+    identityServerBuilder.AddDeveloperSigningCredential();
+}
+else
+{
+    identityServerBuilder.AddSigningCredential(new X509Certificate2(
+        builder.Configuration["OAuthServer:CertPath"],
+        builder.Configuration["OAuthServer:CertPassword"]
+    ));
+}
+
 #endregion
 
 var app = builder.Build();
@@ -54,7 +89,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseAuthentication();
+app.UseIdentityServer();
 app.UseAuthorization();
 
 app.MapRazorPages();

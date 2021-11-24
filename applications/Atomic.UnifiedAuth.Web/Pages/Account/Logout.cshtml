@@ -1,2 +1,30 @@
 ﻿@page
 @model Atomic.UnifiedAuth.Web.Pages.Account.Logout
+
+@{
+  ViewData["Title"] = _localizer["Logout"].Value;
+}
+
+<div class="block">@_localizer["You are now logged out."]</div>
+
+@if (Model.PostLogoutRedirectUri != null)
+{
+  <div class="has-text-centered">
+    <a href="@Model.PostLogoutRedirectUri" id="redirectButton" class="button is-primary">
+      @_localizer["BackTo"] @Model.ClientName
+    </a>
+  </div>
+}
+
+@if (Model.SignOutIframeUrl != null)
+{
+  <iframe src="@Model.SignOutIframeUrl" style="display: none"></iframe>
+}
+
+<script type="text/javascript">
+    setTimeout(function () {
+      window.location = document
+        .getElementById('redirectButton')
+        .getAttribute('href');
+    }, 3000);
+</script>

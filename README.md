@@ -14,13 +14,13 @@ develop and deploy all my applications based on [Dapr](https://dapr.io/)
 ## Scheduled applications
 
 - UnifiedAuth Web
-  - [ ] implement OAuth2.0 to provide token and authorization
-  - [ ] unified login page for all ui-based applications that require authentication
+  - [x] implement OAuth2.0 to provide token and authorization
+  - [x] unified login page for all ui-based applications that require authentication
 - Identity Api
   - [x] manage users
   - [x] check, change, reset password
   - [x] check login with password or external provider
-  - [ ] manage external login providers
+  - [x] manage external login providers
   - [ ] manage permissions
 - IdentityServer Api
   - [ ] manage IdentityServer resources
