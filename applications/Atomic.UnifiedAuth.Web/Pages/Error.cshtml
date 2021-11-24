@@ -1,0 +1,32 @@
+﻿@page
+@model Atomic.UnifiedAuth.Web.Pages.Error
+
+@{
+  ViewData["Title"] = _localizer["Error"].Value;
+}
+
+@if (string.IsNullOrEmpty(Model.Path))
+{
+  <div class="block has-text-centered">
+    @_localizer["Oops, unexpected error occured."]
+  </div>
+}
+else
+{
+  <div class="block">
+    @_localizer["Oops, unexpected error occured when visiting {0}.", Model.Path]
+  </div>
+}
+
+@if (!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+  <div class="block">
+    @Model.ErrorMessage
+  </div>
+}
+
+<div class="has-text-centered">
+  <a asp-page="/Index" class="button is-primary">
+    @_localizer["Go Home"]
+  </a>
+</div>
