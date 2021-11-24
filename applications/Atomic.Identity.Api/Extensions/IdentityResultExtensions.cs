@@ -1,5 +1,4 @@
 using Atomic.ExceptionHandling;
-using Atomic.Identity.Api.ExceptionHandling;
 using Microsoft.AspNetCore.Identity;
 
 namespace Atomic.Identity.Api.Extensions;
@@ -18,6 +17,6 @@ public static class IdentityResultExtensions
             throw AtomicException.InternalServer500Exception;
         }
 
-        throw new IdentityException(result.Errors.First().Description);
+        throw new UserFriendlyException(result.Errors.First().Description);
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Atomic.Identity.Api.ExceptionHandling;
 
-public class SignInException : AtomicException
+public class AuthException : AtomicException
 {
     public static readonly Dictionary<AuthError, string> AuthErrorMessageMap = new Dictionary<AuthError, string>
     {
@@ -19,7 +19,7 @@ public class SignInException : AtomicException
         { AuthError.WrongCredential, "Please try again." },
     };
 
-    public SignInException(AuthError authError, Exception? innerException = null)
+    public AuthException(AuthError authError, Exception? innerException = null)
         : base(AuthErrorMessageMap[authError], AuthErrorDetailMap[authError], innerException)
     {
         switch (authError)

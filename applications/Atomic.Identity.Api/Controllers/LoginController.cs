@@ -60,13 +60,13 @@ public class LoginController : AtomicControllerBase
 
         if (!await _signInManager.CanSignInAsync(user))
         {
-            throw new SignInException(AuthError.IsNotAllowed);
+            throw new AuthException(AuthError.IsNotAllowed);
         }
 
         var userIsLockedOut = _userManager.SupportsUserLockout && await _userManager.IsLockedOutAsync(user);
         if (userIsLockedOut)
         {
-            throw new SignInException(AuthError.IsLockedOut);
+            throw new AuthException(AuthError.IsLockedOut);
         }
 
         return _mapper.Map<AppUser, IdentityUserOutputDto>(user);

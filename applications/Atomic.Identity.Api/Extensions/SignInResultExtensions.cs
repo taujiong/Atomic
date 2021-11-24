@@ -14,17 +14,17 @@ public static class SignInResultExtensions
 
         if (result.IsLockedOut)
         {
-            throw new SignInException(AuthError.IsLockedOut);
+            throw new AuthException(AuthError.IsLockedOut);
         }
 
         if (result.IsNotAllowed)
         {
-            throw new SignInException(AuthError.IsNotAllowed);
+            throw new AuthException(AuthError.IsNotAllowed);
         }
 
         if (!result.RequiresTwoFactor)
         {
-            throw new SignInException(AuthError.WrongCredential);
+            throw new AuthException(AuthError.WrongCredential);
         }
     }
 }
