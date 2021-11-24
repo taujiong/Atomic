@@ -1,3 +1,4 @@
+using Atomic.ExceptionHandling;
 using Atomic.Identity;
 using Dapr.Client;
 using Microsoft.AspNetCore.Authentication;
@@ -9,13 +10,11 @@ namespace Atomic.UnifiedAuth.Web.Pages.Account;
 public class Login : AccountPageModel
 {
     private readonly DaprClient _daprClient;
-    private readonly ILogger<Login> _logger;
 
-    public Login(DaprClient daprClient, ILogger<Login> logger)
+    public Login(DaprClient daprClient)
     {
         Input ??= new PasswordLoginDto();
         _daprClient = daprClient;
-        _logger = logger;
     }
 
     [BindProperty]
@@ -40,6 +39,10 @@ public class Login : AccountPageModel
 
         if (response.IsSuccessStatusCode)
         {
+            var user = await response.Content.ReadFromJsonAsync<IdentityUserOutputDto>();
+            if (user == null) throw AtomicException.InternalServer500Exception;
+            await SignInWithUserAsync(user);
+
             return RedirectSafely();
         }
 

@@ -1,0 +1,28 @@
+﻿@page
+@model Atomic.UnifiedAuth.Web.Pages.Index
+@inject IConfiguration _configuration;
+
+@{
+  ViewData["Title"] = _localizer["Welcome"].Value;
+  var description = _configuration["App:Description"];
+}
+
+<div class="block">
+  @_localizer[description]
+</div>
+
+<div class="has-text-centered">
+  @if (Model.IsAuthenticated)
+  {
+    // TODO: add entry to other applications based on permission
+    <a asp-page="Account/Logout" class="button is-primary">
+      @_localizer["Logout"]
+    </a>
+  }
+  else
+  {
+    <a asp-page="Account/Login" class="button is-primary">
+      @_localizer["Explore"]
+    </a>
+  }
+</div>

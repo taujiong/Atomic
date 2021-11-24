@@ -1,11 +1,10 @@
 using System.Security.Claims;
 using Atomic.ExceptionHandling;
-using Atomic.UnifiedAuth.Web.Localization;
+using Atomic.Identity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Localization;
 
 namespace Atomic.UnifiedAuth.Web.Pages.Account;
 
@@ -29,10 +28,9 @@ public class AccountPageModel : PageModel
 
     protected ActionResult RedirectSafely()
     {
-        var localizer = HttpContext.RequestServices.GetRequiredService<IStringLocalizer<AtomicAuthResource>>();
         if (string.IsNullOrEmpty(ReturnUrl))
         {
-            throw new UserFriendlyException(localizer["No return url found."]);
+            return RedirectToPage("/Index");
         }
 
         return Redirect(ReturnUrl);
@@ -64,5 +62,27 @@ public class AccountPageModel : PageModel
             AuthenticationTokens = auth.Properties!.GetTokens(),
             AuthenticationProperties = auth.Properties,
         };
+    }
+
+    protected async Task SignInWithUserAsync(IdentityUserOutputDto user)
+    {
+        var claims = new List<Claim>
+        {
+            new(ClaimTypes.NameIdentifier, user.Id!),
+            new(ClaimTypes.Name, user.UserName!),
+        };
+        var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
+
+        if (!string.IsNullOrEmpty(user.Email))
+        {
+            identity.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+        }
+
+        if (!string.IsNullOrEmpty(user.PhoneNumber))
+        {
+            identity.AddClaim(new Claim(ClaimTypes.MobilePhone, user.PhoneNumber));
+        }
+
+        await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, new ClaimsPrincipal(identity));
     }
 }

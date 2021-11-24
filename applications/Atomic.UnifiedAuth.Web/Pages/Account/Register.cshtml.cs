@@ -1,4 +1,5 @@
-﻿using Atomic.Identity;
+﻿using Atomic.ExceptionHandling;
+using Atomic.Identity;
 using Atomic.UnifiedAuth.Web.Localization;
 using Dapr.Client;
 using Microsoft.AspNetCore.Mvc;
@@ -42,18 +43,20 @@ public class Register : AccountPageModel
     {
         if (!ModelState.IsValid) return Page();
 
-        var request = _daprClient.CreateInvokeMethodRequest(
+        var createUserRequest = _daprClient.CreateInvokeMethodRequest(
             HttpMethod.Post,
             "Identity",
             "api/identity/users",
             Input);
-        var response = await _daprClient.InvokeMethodWithResponseAsync(request);
+        var createUserResponse = await _daprClient.InvokeMethodWithResponseAsync(createUserRequest);
 
-        if (!response.IsSuccessStatusCode)
+        if (!createUserResponse.IsSuccessStatusCode)
         {
-            return await PageWithError(response);
+            return await PageWithError(createUserResponse);
         }
 
+        // now we create the user successfully.
+        // if this is an external login, we should remember it.
         if (IsExternal)
         {
             var loginInfo = await GetExternalLoginInfoAsync();
@@ -66,8 +69,34 @@ public class Register : AccountPageModel
                 return Page();
             }
 
-            // TODO: add external login via dapr
+            var newUser = await createUserResponse.Content.ReadFromJsonAsync<IdentityUserOutputDto>();
+            if (newUser == null)
+            {
+                // this is not supposed to happen, actually.
+                throw AtomicException.InternalServer500Exception;
+            }
+
+            var addLoginRequest = _daprClient.CreateInvokeMethodRequest(
+                HttpMethod.Post,
+                "Identity",
+                "api/identity/external-logins",
+                new ExternalLoginCreateDto
+                {
+                    UserId = newUser.Id,
+                    LoginProvider = loginInfo.LoginProvider,
+                    ProviderKey = loginInfo.ProviderKey,
+                    DisplayName = loginInfo.ProviderDisplayName,
+                });
+            var addLoginResponse = await _daprClient.InvokeMethodWithResponseAsync(addLoginRequest);
+            if (!addLoginResponse.IsSuccessStatusCode)
+            {
+                return await PageWithError(addLoginResponse);
+            }
         }
+
+        var user = await createUserResponse.Content.ReadFromJsonAsync<IdentityUserOutputDto>();
+        if (user == null) throw AtomicException.InternalServer500Exception;
+        await SignInWithUserAsync(user);
 
         return RedirectSafely();
     }

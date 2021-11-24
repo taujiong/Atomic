@@ -71,6 +71,10 @@ public class ExternalLogin : AccountPageModel
         var response = await _daprClient.InvokeMethodWithResponseAsync(request);
         if (response.IsSuccessStatusCode)
         {
+            var user = await response.Content.ReadFromJsonAsync<IdentityUserOutputDto>();
+            if (user == null) throw AtomicException.InternalServer500Exception;
+            await SignInWithUserAsync(user);
+
             return RedirectSafely();
         }
 
