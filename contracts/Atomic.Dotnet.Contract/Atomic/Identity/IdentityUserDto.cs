@@ -10,6 +10,7 @@ public record IdentityUserUpdateDto
     public string? UserName { get; set; }
 
     [DataType(DataType.EmailAddress)]
+    [DisplayName("Email")]
     public string? Email { get; set; }
 
     [DataType(DataType.PhoneNumber)]
@@ -22,6 +23,7 @@ public record IdentityUserCreateDto : IdentityUserUpdateDto
     [Required]
     [StringLength(16, MinimumLength = 6)]
     [DataType(DataType.Password)]
+    [DisplayName("Password")]
     public string? Password { get; set; }
 }
 

@@ -20,7 +20,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 });
 builder.Services.AddDataProtection(); // fot token providers in identity system
 builder.Services.TryAddSingleton<ISystemClock, SystemClock>(); // for security stamp validators in identity system
-builder.Services.AddIdentityCore<AppUser>()
+builder.Services.AddIdentityCore<AppUser>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+    })
     .AddErrorDescriber<LocalizedIdentityErrorDescriber>()
     .AddSignInManager<SignInManager<AppUser>>()
     .AddEntityFrameworkStores<AppDbContext>()
