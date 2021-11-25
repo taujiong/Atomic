@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Add services to the container
 
+builder.AddAtomicCore();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     var connectionString = builder.Configuration.GetConnectionString("Identity");

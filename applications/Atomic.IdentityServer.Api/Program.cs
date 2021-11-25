@@ -1,3 +1,4 @@
+using Atomic.IdentityServer.Api.Models;
 using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -5,9 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 #region Add services to the container
 
+builder.AddAtomicCore();
+
 var mvcBuilder = builder.Services.AddControllers();
 builder.AddAtomicLocalization(mvcBuilder);
 builder.ConfigureApiController();
+
+builder.Services.AddAutoMapper(typeof(IdentityServerMapperProfile));
 
 var connectionString = builder.Configuration.GetConnectionString("IdentityServer");
 var migrationAssembly = typeof(Program).Assembly.GetName().FullName;

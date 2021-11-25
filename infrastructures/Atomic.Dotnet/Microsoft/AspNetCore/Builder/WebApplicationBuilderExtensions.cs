@@ -2,17 +2,27 @@ using System.Globalization;
 using System.Reflection;
 using Atomic.AspNetCore.Mvc.ApiExplorer;
 using Atomic.AspNetCore.Mvc.Conventions;
+using Atomic.AspNetCore.Users;
 using Atomic.ExceptionHandling;
 using Atomic.Localization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Microsoft.AspNetCore.Builder;
 
 public static class WebApplicationBuilderExtensions
 {
+    public static void AddAtomicCore(this WebApplicationBuilder builder)
+    {
+        if (builder == null) throw new ArgumentNullException(nameof(builder));
+
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.TryAddScoped<ICurrentUser, CurrentUser>();
+    }
+
     public static void ConfigureApiController(this WebApplicationBuilder builder)
     {
         if (builder == null) throw new ArgumentNullException(nameof(builder));

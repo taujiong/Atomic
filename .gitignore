@@ -436,3 +436,4 @@ $RECYCLE.BIN/
 ### JetBrains+all Patch ###
 
 appsettings.*.json
+*.jwk

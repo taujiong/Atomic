@@ -24,7 +24,7 @@ develop and deploy all my applications based on [Dapr](https://dapr.io/)
   - [ ] manage permissions
 - IdentityServer Api
   - [ ] manage IdentityServer resources
-    - [ ] clients
+    - [x] clients
     - [ ] identity resources
     - [ ] api scopes
     - [ ] api resources
