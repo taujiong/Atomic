@@ -42,8 +42,8 @@ public class UserController : AtomicControllerBase,
             .WhereIf(
                 !string.IsNullOrEmpty(input.Filter),
                 user => user.UserName.Contains(input.Filter!) || user.Email.Contains(input.Filter!))
-            .PageBy(input.SkipCount, input.MaxResultCount)
             .OrderBy(input.Sort ?? "UserName ASC")
+            .PageBy(input.SkipCount, input.MaxResultCount)
             .ToListAsync();
 
         var userDtos = _mapper.Map<List<AppUser>, List<IdentityUserOutputDto>>(users);

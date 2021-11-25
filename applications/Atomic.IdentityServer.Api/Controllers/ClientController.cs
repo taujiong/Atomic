@@ -5,9 +5,9 @@ using Atomic.AppService.Services;
 using Atomic.AspNetCore.Mvc;
 using Atomic.AspNetCore.Users;
 using Atomic.ExceptionHandling;
+using Atomic.IdentityServer.Api.Data;
 using Atomic.IdentityServer.Api.Extensions;
 using AutoMapper;
-using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,11 +18,11 @@ public class ClientController : AtomicControllerBase,
     ICrudAppService<string, ClientOutputDto, ClientListOutputDto, ClientCreateUpdateDto, ClientCreateUpdateDto>
 {
     private readonly ICurrentUser _currentUser;
-    private readonly ConfigurationDbContext _dbContext;
+    private readonly AppDbContext _dbContext;
     private readonly IMapper _mapper;
 
     public ClientController(
-        ConfigurationDbContext dbContext,
+        AppDbContext dbContext,
         IMapper mapper,
         ICurrentUser currentUser
     )
@@ -36,11 +36,7 @@ public class ClientController : AtomicControllerBase,
     public async Task<ClientOutputDto> GetById(string id)
     {
         var client = await _dbContext.Clients
-            .Include(c => c.ClientSecrets)
-            .Include(c => c.RedirectUris)
-            .Include(c => c.PostLogoutRedirectUris)
-            .Include(c => c.AllowedScopes)
-            .Include(c => c.AllowedGrantTypes)
+            .WithDetails()
             .FirstOrDefaultAsync(c => id.Equals(c.ClientId));
         if (client == null) throw new EntityNotFoundException(typeof(Client), id);
 
@@ -55,8 +51,8 @@ public class ClientController : AtomicControllerBase,
             .WhereIf(
                 !string.IsNullOrEmpty(input.Filter),
                 c => c.ClientName.Contains(input.Filter!))
-            .PageBy(input.SkipCount, input.MaxResultCount)
             .OrderBy(input.Sort ?? "ClientName ASC")
+            .PageBy(input.SkipCount, input.MaxResultCount)
             .ToListAsync();
 
         var clientDtos = _mapper.Map<List<Client>, List<ClientListOutputDto>>(clients);
@@ -70,6 +66,10 @@ public class ClientController : AtomicControllerBase,
         {
             ClientId = Guid.NewGuid().ToString("N"),
             AllowAccessTokensViaBrowser = input.AllowAccessTokensViaBrowser,
+            RedirectUris = new List<ClientRedirectUri>(),
+            PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>(),
+            AllowedScopes = new List<ClientScope>(),
+            AllowedGrantTypes = new List<ClientGrantType>(),
             Properties = new List<ClientProperty>
             {
                 new()
@@ -90,7 +90,9 @@ public class ClientController : AtomicControllerBase,
     [HttpPut("{id}")]
     public async Task<ClientOutputDto> UpdateById(string id, ClientCreateUpdateDto input)
     {
-        var client = await _dbContext.Clients.FirstOrDefaultAsync(c => id.Equals(c.ClientId));
+        var client = await _dbContext.Clients
+            .WithDetails()
+            .FirstOrDefaultAsync(c => id.Equals(c.ClientId));
         if (client == null) throw new EntityNotFoundException(typeof(Client), id);
 
         client.MapFrom(input);

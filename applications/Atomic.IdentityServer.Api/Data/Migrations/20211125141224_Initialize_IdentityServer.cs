@@ -1,28 +1,30 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Atomic.IdentityServer.Api.Migrations.Configuration
+namespace Atomic.IdentityServer.Api.Data.Migrations
 {
-    public partial class Initialize_Configuration : Migration
+    public partial class Initialize_IdentityServer : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // DO NOT DELETE THIS!
+            // https://www.npgsql.org/efcore/release-notes/6.0.html#migrating-columns-from-timestamp-to-timestamptz
+            migrationBuilder.Sql("SET TimeZone='UTC'");
+
             migrationBuilder.CreateTable(
                 name: "ApiResources",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Enabled = table.Column<bool>(type: "boolean", nullable: false),
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    Description =
-                        table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
-                    AllowedAccessTokenSigningAlgorithms = table.Column<string>(type: "character varying(100)",
-                        maxLength: 100, nullable: true),
+                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    AllowedAccessTokenSigningAlgorithms = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     ShowInDiscoveryDocument = table.Column<bool>(type: "boolean", nullable: false),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -39,13 +41,11 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Enabled = table.Column<bool>(type: "boolean", nullable: false),
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    Description =
-                        table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
                     Required = table.Column<bool>(type: "boolean", nullable: false),
                     Emphasize = table.Column<bool>(type: "boolean", nullable: false),
                     ShowInDiscoveryDocument = table.Column<bool>(type: "boolean", nullable: false)
@@ -60,16 +60,13 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Enabled = table.Column<bool>(type: "boolean", nullable: false),
                     ClientId = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    ProtocolType =
-                        table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    ProtocolType = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     RequireClientSecret = table.Column<bool>(type: "boolean", nullable: false),
                     ClientName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    Description =
-                        table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
                     ClientUri = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
                     LogoUri = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
                     RequireConsent = table.Column<bool>(type: "boolean", nullable: false),
@@ -79,16 +76,13 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                     AllowPlainTextPkce = table.Column<bool>(type: "boolean", nullable: false),
                     RequireRequestObject = table.Column<bool>(type: "boolean", nullable: false),
                     AllowAccessTokensViaBrowser = table.Column<bool>(type: "boolean", nullable: false),
-                    FrontChannelLogoutUri =
-                        table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
+                    FrontChannelLogoutUri = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
                     FrontChannelLogoutSessionRequired = table.Column<bool>(type: "boolean", nullable: false),
-                    BackChannelLogoutUri =
-                        table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
+                    BackChannelLogoutUri = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
                     BackChannelLogoutSessionRequired = table.Column<bool>(type: "boolean", nullable: false),
                     AllowOfflineAccess = table.Column<bool>(type: "boolean", nullable: false),
                     IdentityTokenLifetime = table.Column<int>(type: "integer", nullable: false),
-                    AllowedIdentityTokenSigningAlgorithms = table.Column<string>(type: "character varying(100)",
-                        maxLength: 100, nullable: true),
+                    AllowedIdentityTokenSigningAlgorithms = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     AccessTokenLifetime = table.Column<int>(type: "integer", nullable: false),
                     AuthorizationCodeLifetime = table.Column<int>(type: "integer", nullable: false),
                     ConsentLifetime = table.Column<int>(type: "integer", nullable: true),
@@ -101,10 +95,8 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                     EnableLocalLogin = table.Column<bool>(type: "boolean", nullable: false),
                     IncludeJwtId = table.Column<bool>(type: "boolean", nullable: false),
                     AlwaysSendClientClaims = table.Column<bool>(type: "boolean", nullable: false),
-                    ClientClaimsPrefix =
-                        table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    PairWiseSubjectSalt =
-                        table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    ClientClaimsPrefix = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    PairWiseSubjectSalt = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Updated = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     LastAccessed = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -119,17 +111,34 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 });
 
             migrationBuilder.CreateTable(
+                name: "DeviceCodes",
+                columns: table => new
+                {
+                    UserCode = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    DeviceCode = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    SubjectId = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    SessionId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    ClientId = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Data = table.Column<string>(type: "character varying(50000)", maxLength: 50000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeviceCodes", x => x.UserCode);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "IdentityResources",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Enabled = table.Column<bool>(type: "boolean", nullable: false),
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     DisplayName = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    Description =
-                        table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
                     Required = table.Column<bool>(type: "boolean", nullable: false),
                     Emphasize = table.Column<bool>(type: "boolean", nullable: false),
                     ShowInDiscoveryDocument = table.Column<bool>(type: "boolean", nullable: false),
@@ -143,12 +152,31 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 });
 
             migrationBuilder.CreateTable(
+                name: "PersistedGrants",
+                columns: table => new
+                {
+                    Key = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Type = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
+                    SubjectId = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    SessionId = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    ClientId = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    ConsumedTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Data = table.Column<string>(type: "character varying(50000)", maxLength: 50000, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PersistedGrants", x => x.Key);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ApiResourceClaims",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ApiResourceId = table.Column<int>(type: "integer", nullable: false),
                     Type = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
                 },
@@ -168,8 +196,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ApiResourceId = table.Column<int>(type: "integer", nullable: false),
                     Key = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     Value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
@@ -190,8 +217,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Scope = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     ApiResourceId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -211,11 +237,9 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ApiResourceId = table.Column<int>(type: "integer", nullable: false),
-                    Description =
-                        table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
+                    Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: true),
                     Value = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
                     Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Type = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
@@ -237,8 +261,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ScopeId = table.Column<int>(type: "integer", nullable: false),
                     Type = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
                 },
@@ -258,8 +281,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ScopeId = table.Column<int>(type: "integer", nullable: false),
                     Key = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     Value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
@@ -280,8 +302,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Type = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     Value = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     ClientId = table.Column<int>(type: "integer", nullable: false)
@@ -302,8 +323,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Origin = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     ClientId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -323,8 +343,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     GrantType = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     ClientId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -344,8 +363,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Provider = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     ClientId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -365,10 +383,8 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    PostLogoutRedirectUri =
-                        table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PostLogoutRedirectUri = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     ClientId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -387,8 +403,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ClientId = table.Column<int>(type: "integer", nullable: false),
                     Key = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     Value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
@@ -409,10 +424,8 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RedirectUri =
-                        table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    RedirectUri = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     ClientId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -431,8 +444,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Scope = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     ClientId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -452,11 +464,9 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ClientId = table.Column<int>(type: "integer", nullable: false),
-                    Description =
-                        table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
+                    Description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
                     Value = table.Column<string>(type: "character varying(4000)", maxLength: 4000, nullable: false),
                     Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     Type = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
@@ -478,8 +488,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     IdentityResourceId = table.Column<int>(type: "integer", nullable: false),
                     Type = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false)
                 },
@@ -499,8 +508,7 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy",
-                            NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     IdentityResourceId = table.Column<int>(type: "integer", nullable: false),
                     Key = table.Column<string>(type: "character varying(250)", maxLength: 250, nullable: false),
                     Value = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false)
@@ -600,6 +608,12 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clients_ClientName",
+                table: "Clients",
+                column: "ClientName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClientScopes_ClientId",
                 table: "ClientScopes",
                 column: "ClientId");
@@ -608,6 +622,17 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 name: "IX_ClientSecrets_ClientId",
                 table: "ClientSecrets",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeviceCodes_DeviceCode",
+                table: "DeviceCodes",
+                column: "DeviceCode",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeviceCodes_Expiration",
+                table: "DeviceCodes",
+                column: "Expiration");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityResourceClaims_IdentityResourceId",
@@ -624,6 +649,21 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 table: "IdentityResources",
                 column: "Name",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersistedGrants_Expiration",
+                table: "PersistedGrants",
+                column: "Expiration");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersistedGrants_SubjectId_ClientId_Type",
+                table: "PersistedGrants",
+                columns: new[] { "SubjectId", "ClientId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersistedGrants_SubjectId_SessionId_Type",
+                table: "PersistedGrants",
+                columns: new[] { "SubjectId", "SessionId", "Type" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -674,10 +714,16 @@ namespace Atomic.IdentityServer.Api.Migrations.Configuration
                 name: "ClientSecrets");
 
             migrationBuilder.DropTable(
+                name: "DeviceCodes");
+
+            migrationBuilder.DropTable(
                 name: "IdentityResourceClaims");
 
             migrationBuilder.DropTable(
                 name: "IdentityResourceProperties");
+
+            migrationBuilder.DropTable(
+                name: "PersistedGrants");
 
             migrationBuilder.DropTable(
                 name: "ApiResources");

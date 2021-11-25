@@ -1,4 +1,5 @@
 using IdentityServer4.EntityFramework.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Atomic.IdentityServer.Api.Extensions;
 
@@ -13,7 +14,6 @@ public static class ClientExtensions
         client.LogoUri = input.LogoUri;
         client.ClientUri = input.ClientUri;
 
-        client.RedirectUris = new List<ClientRedirectUri>(input.RedirectUris.Count);
         client.RedirectUris.Clear();
         foreach (var redirectUri in input.RedirectUris)
         {
@@ -24,7 +24,7 @@ public static class ClientExtensions
             });
         }
 
-        client.AllowedScopes = new List<ClientScope>(input.AllowedScopes.Count);
+        client.AllowedScopes.Clear();
         foreach (var scope in input.AllowedScopes)
         {
             client.AllowedScopes.Add(new ClientScope
@@ -34,7 +34,7 @@ public static class ClientExtensions
             });
         }
 
-        client.AllowedGrantTypes = new List<ClientGrantType>(input.AllowedGrantTypes.Count);
+        client.AllowedGrantTypes.Clear();
         foreach (var grantType in input.AllowedGrantTypes)
         {
             client.AllowedGrantTypes.Add(new ClientGrantType
@@ -44,7 +44,7 @@ public static class ClientExtensions
             });
         }
 
-        client.PostLogoutRedirectUris = new List<ClientPostLogoutRedirectUri>(input.PostLogoutRedirectUris.Count);
+        client.PostLogoutRedirectUris.Clear();
         foreach (var redirectUri in input.PostLogoutRedirectUris)
         {
             client.PostLogoutRedirectUris.Add(new ClientPostLogoutRedirectUri
@@ -55,5 +55,14 @@ public static class ClientExtensions
         }
 
         return client;
+    }
+
+    public static IQueryable<Client> WithDetails(this DbSet<Client> clients)
+    {
+        return clients.Include(c => c.ClientSecrets)
+            .Include(c => c.RedirectUris)
+            .Include(c => c.PostLogoutRedirectUris)
+            .Include(c => c.AllowedScopes)
+            .Include(c => c.AllowedGrantTypes);
     }
 }

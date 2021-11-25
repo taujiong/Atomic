@@ -1,5 +1,5 @@
+using Atomic.IdentityServer.Api.Data;
 using Atomic.IdentityServer.Api.Models;
-using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,25 +14,18 @@ builder.ConfigureApiController();
 
 builder.Services.AddAutoMapper(typeof(IdentityServerMapperProfile));
 
-var connectionString = builder.Configuration.GetConnectionString("IdentityServer");
-var migrationAssembly = typeof(Program).Assembly.GetName().FullName;
-builder.Services.AddIdentityServer()
-    .AddConfigurationStore<ConfigurationDbContext>(options =>
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    var connectionString = builder.Configuration.GetConnectionString("IdentityServer");
+    options.UseNpgsql(connectionString, optionsBuilder =>
     {
-        options.ConfigureDbContext = b => b.UseNpgsql(connectionString, sqlOptions =>
-        {
-            sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(15), null);
-            sqlOptions.MigrationsAssembly(migrationAssembly);
-        });
-    })
-    .AddOperationalStore<PersistedGrantDbContext>(options =>
-    {
-        options.ConfigureDbContext = b => b.UseNpgsql(connectionString, sqlOptions =>
-        {
-            sqlOptions.EnableRetryOnFailure(5, TimeSpan.FromSeconds(15), null);
-            sqlOptions.MigrationsAssembly(migrationAssembly);
-        });
+        optionsBuilder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(15), null);
+        optionsBuilder.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
     });
+});
+builder.Services.AddIdentityServer()
+    .AddConfigurationStore<AppDbContext>()
+    .AddOperationalStore<AppDbContext>();
 
 #endregion
 
