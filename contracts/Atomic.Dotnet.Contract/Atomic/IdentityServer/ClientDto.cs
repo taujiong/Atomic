@@ -28,7 +28,7 @@ public record ClientOutputDto : ClientListOutputDto
 
     public List<string> PostLogoutRedirectUris { get; set; } = new();
 
-    public List<ClientSecretOutputDto> ClientSecrets { get; set; } = new();
+    public List<ClientSecretMaskedDto> ClientSecrets { get; set; } = new();
 }
 
 public record ClientCreateUpdateDto

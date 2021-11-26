@@ -81,6 +81,7 @@ public class ClientController : AtomicControllerBase,
         };
 
         client.MapFrom(input);
+        client.GenerateNewSecret();
         var savedClient = await _dbContext.Clients.AddAsync(client);
         await _dbContext.SaveChangesAsync(true);
 
@@ -110,5 +111,34 @@ public class ClientController : AtomicControllerBase,
 
         _dbContext.Clients.Remove(client);
         await _dbContext.SaveChangesAsync(true);
+    }
+
+    [HttpDelete("{id}/secrets")]
+    public async Task DeleteSecret(string id, int secretId)
+    {
+        var client = await _dbContext.Clients
+            .Include(c => c.ClientSecrets)
+            .FirstOrDefaultAsync(c => id.Equals(c.ClientId));
+        if (client == null) throw new EntityNotFoundException(typeof(Client), id);
+
+        var secret = client.ClientSecrets.Find(s => s.Id == secretId);
+        if (secret == null) throw new EntityNotFoundException(typeof(ClientSecret), secretId);
+
+        client.ClientSecrets.Remove(secret);
+        await _dbContext.SaveChangesAsync();
+    }
+
+    [HttpPost("{id}/secrets")]
+    public async Task<ClientSecretDto> GenerateNewSecret(string id)
+    {
+        var client = await _dbContext.Clients
+            .Include(c => c.ClientSecrets)
+            .FirstOrDefaultAsync(c => id.Equals(c.ClientId));
+        if (client == null) throw new EntityNotFoundException(typeof(Client), id);
+
+        var secretDto = client.GenerateNewSecret();
+        await _dbContext.SaveChangesAsync();
+
+        return secretDto;
     }
 }

@@ -17,8 +17,9 @@ public class IdentityServerMapperProfile : Profile
         ).ForMember(des => des.AllowedScopes,
             opt => opt.MapFrom(src => src.AllowedScopes.Select(x => x.Scope))
         ).ForMember(des => des.ClientSecrets,
-            opt => opt.MapFrom(src => src.ClientSecrets.Select(x => new ClientSecretOutputDto
+            opt => opt.MapFrom(src => src.ClientSecrets.Select(x => new ClientSecretMaskedDto
             {
+                Id = x.Id,
                 Description = x.Description,
                 Created = x.Created,
                 MaskedValue = x.Value.Substring(x.Value.Length - 9, 8).PadLeft(14, '*'),

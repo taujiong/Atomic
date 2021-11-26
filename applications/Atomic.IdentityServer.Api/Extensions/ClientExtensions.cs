@@ -1,3 +1,4 @@
+using IdentityModel;
 using IdentityServer4.EntityFramework.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,5 +65,26 @@ public static class ClientExtensions
             .Include(c => c.PostLogoutRedirectUris)
             .Include(c => c.AllowedScopes)
             .Include(c => c.AllowedGrantTypes);
+    }
+
+    public static ClientSecretDto GenerateNewSecret(this Client client)
+    {
+        var rawSecretValue = Guid.NewGuid().ToString("D");
+        var secret = new ClientSecret
+        {
+            Client = client,
+            Value = rawSecretValue.ToSha256(),
+            Description = $"for client: {client.ClientName}",
+        };
+
+        client.ClientSecrets ??= new List<ClientSecret>();
+        client.ClientSecrets.Add(secret);
+
+        return new ClientSecretDto
+        {
+            Description = secret.Description,
+            Created = secret.Created,
+            Value = rawSecretValue,
+        };
     }
 }
